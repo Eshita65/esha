@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "ChainPass": {
+      "address": "0x448C46b41c7230DD351805AF370B348F02610284",
+      "startBlock": 10688455
+    }
+  }
+}

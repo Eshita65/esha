@@ -1,0 +1,65 @@
+/* ── Events Page Styles ──────────────────────────────────────────────────── */
+
+.events-page {
+  width: min(1100px, 92vw);
+  margin: 2rem auto 3rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.events-page__hero {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: linear-gradient(125deg, #0d1f3a, #15304f 45%, #1a3f54);
+  color: #eff8ff;
+  border: 1px solid #2f5f8f;
+  box-shadow: 0 18px 45px rgba(8, 20, 40, 0.45);
+}
+
+.events-page__hero h1 {
+  margin: 0.3rem 0 0.5rem;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: #f4fcff;
+}
+
+.events-page__sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ec5e8;
+}
+
+/* ── Top nav bar shared styles ───────────────────────────────────────────── */
+.app-nav {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(4, 20, 38, 0.92);
+  border-bottom: 1px solid rgba(47, 95, 143, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.app-nav__btn {
+  padding: 0.45rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #9ec5e8;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.app-nav__btn:hover {
+  background: rgba(14, 85, 110, 0.35);
+  color: #f0faff;
+}
+
+.app-nav__btn--active {
+  background: #0f6a83;
+  color: #ffffff;
+  border-color: #0a4f64;
+}

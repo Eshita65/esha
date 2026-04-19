@@ -1,0 +1,1152 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "_platformWallet",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_vrfCoordinator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_subscriptionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "ERC721IncorrectOwner",
+    "type": "error",
+    "inputs": [
+      { "name": "sender", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "owner", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721InsufficientApproval",
+    "type": "error",
+    "inputs": [
+      { "name": "operator", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ]
+  },
+  {
+    "name": "ERC721InvalidApprover",
+    "type": "error",
+    "inputs": [
+      { "name": "approver", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721InvalidOperator",
+    "type": "error",
+    "inputs": [
+      { "name": "operator", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721InvalidOwner",
+    "type": "error",
+    "inputs": [
+      { "name": "owner", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721InvalidReceiver",
+    "type": "error",
+    "inputs": [
+      { "name": "receiver", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721InvalidSender",
+    "type": "error",
+    "inputs": [
+      { "name": "sender", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "ERC721NonexistentToken",
+    "type": "error",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ]
+  },
+  {
+    "name": "OnlyCoordinatorCanFulfill",
+    "type": "error",
+    "inputs": [
+      { "name": "have", "type": "address", "internalType": "address" },
+      { "name": "want", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "name": "OnlyOwnerOrCoordinator",
+    "type": "error",
+    "inputs": [
+      { "name": "have", "type": "address", "internalType": "address" },
+      { "name": "owner", "type": "address", "internalType": "address" },
+      { "name": "coordinator", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "name": "ZeroAddress", "type": "error", "inputs": [] },
+  {
+    "name": "Approval",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "approved",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ApprovalForAll",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "operator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "approved",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "CashbackPaid",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "winner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "vrfRequestId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "CoordinatorSet",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "vrfCoordinator",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "EventCreated",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "organiser",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "venue",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "ticketPrice",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "maxSupply",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "saleStartTime",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "saleEndTime",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "OwnershipTransferRequested",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "OwnershipTransferred",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ResaleCancelled",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ResaleCompleted",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "buyer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "price",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ResaleListed",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "seller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "resalePrice",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "ReviewSubmitted",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "reviewer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "contentHash",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "StakeSettled",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "organiser",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "organiserAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "platformAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "TicketPurchased",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "buyer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "price",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "Transfer",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "VRFWinnerRequested",
+    "type": "event",
+    "inputs": [
+      {
+        "name": "requestId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "eventId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "name": "CASHBACK_PERCENT",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "KEY_HASH",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "MAX_TICKETS_PER_WALLET",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "ORGANISER_ROYALTY_PCT",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "PLATFORM_FEE_PCT",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "RESALE_CAP_PERCENT",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "REVIEW_WINDOW_SECONDS",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "STAKE_RETURN_PCT",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "acceptOwnership",
+    "type": "function",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "approve",
+    "type": "function",
+    "inputs": [
+      { "name": "to", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "balanceOf",
+    "type": "function",
+    "inputs": [
+      { "name": "owner", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "buyResaleTicket",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "name": "buyTicket",
+    "type": "function",
+    "inputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "name": "cancelResaleListing",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "createEvent",
+    "type": "function",
+    "inputs": [
+      {
+        "name": "p",
+        "type": "tuple",
+        "components": [
+          { "name": "name", "type": "string", "internalType": "string" },
+          { "name": "venue", "type": "string", "internalType": "string" },
+          {
+            "name": "ticketPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          { "name": "maxSupply", "type": "uint256", "internalType": "uint256" },
+          {
+            "name": "saleStartTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "saleEndTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "eventStartTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "eventEndTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct ChainPass.CreateEventParams"
+      }
+    ],
+    "outputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "payable"
+  },
+  {
+    "name": "emergencyWithdraw",
+    "type": "function",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "eventCIDs",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "eventReviews",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      { "name": "reviewer", "type": "address", "internalType": "address" },
+      { "name": "contentHash", "type": "string", "internalType": "string" },
+      { "name": "submittedAt", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "events",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+      { "name": "organiser", "type": "address", "internalType": "address" },
+      { "name": "ticketPrice", "type": "uint256", "internalType": "uint256" },
+      { "name": "maxSupply", "type": "uint256", "internalType": "uint256" },
+      { "name": "totalMinted", "type": "uint256", "internalType": "uint256" },
+      { "name": "saleStartTime", "type": "uint256", "internalType": "uint256" },
+      { "name": "saleEndTime", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "eventStartTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      { "name": "eventEndTime", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "organiserStake",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      { "name": "stakeReturned", "type": "bool", "internalType": "bool" },
+      { "name": "exists", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getApproved",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getEvent",
+    "type": "function",
+    "inputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+          { "name": "organiser", "type": "address", "internalType": "address" },
+          {
+            "name": "ticketPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          { "name": "maxSupply", "type": "uint256", "internalType": "uint256" },
+          {
+            "name": "totalMinted",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "saleStartTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "saleEndTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "eventStartTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "eventEndTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "organiserStake",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          { "name": "stakeReturned", "type": "bool", "internalType": "bool" },
+          { "name": "exists", "type": "bool", "internalType": "bool" }
+        ],
+        "internalType": "struct ChainPass.Event"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getEventReviews",
+    "type": "function",
+    "inputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "components": [
+          { "name": "reviewer", "type": "address", "internalType": "address" },
+          { "name": "contentHash", "type": "string", "internalType": "string" },
+          {
+            "name": "submittedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
+        "internalType": "struct ChainPass.Review[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getTicket",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+          { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+          { "name": "owner", "type": "address", "internalType": "address" },
+          {
+            "name": "originalPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          { "name": "isSoulbound", "type": "bool", "internalType": "bool" },
+          { "name": "isUsed", "type": "bool", "internalType": "bool" }
+        ],
+        "internalType": "struct ChainPass.Ticket"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getTokenURI",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getTotalEvents",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getTotalTicketsMinted",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "getWalletTickets",
+    "type": "function",
+    "inputs": [
+      { "name": "wallet", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [
+      { "name": "", "type": "uint256[]", "internalType": "uint256[]" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "hasReviewed",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "isApprovedForAll",
+    "type": "function",
+    "inputs": [
+      { "name": "owner", "type": "address", "internalType": "address" },
+      { "name": "operator", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "isTicketHolder",
+    "type": "function",
+    "inputs": [
+      { "name": "u", "type": "address", "internalType": "address" },
+      { "name": "e", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "listForResale",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "resalePrice", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "name",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "owner",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "ownerOf",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "platformWallet",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "rawFulfillRandomWords",
+    "type": "function",
+    "inputs": [
+      { "name": "requestId", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "randomWords",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "requestReviewDropWinner",
+    "type": "function",
+    "inputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "resaleListings",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "seller", "type": "address", "internalType": "address" },
+      { "name": "resalePrice", "type": "uint256", "internalType": "uint256" },
+      { "name": "active", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "s_vrfCoordinator",
+    "type": "function",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IVRFCoordinatorV2Plus"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "safeTransferFrom",
+    "type": "function",
+    "inputs": [
+      { "name": "from", "type": "address", "internalType": "address" },
+      { "name": "to", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "safeTransferFrom",
+    "type": "function",
+    "inputs": [
+      { "name": "from", "type": "address", "internalType": "address" },
+      { "name": "to", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "data", "type": "bytes", "internalType": "bytes" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "setApprovalForAll",
+    "type": "function",
+    "inputs": [
+      { "name": "operator", "type": "address", "internalType": "address" },
+      { "name": "approved", "type": "bool", "internalType": "bool" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "setCoordinator",
+    "type": "function",
+    "inputs": [
+      {
+        "name": "_vrfCoordinator",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "setPlatformWallet",
+    "type": "function",
+    "inputs": [
+      { "name": "newWallet", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "submitReview",
+    "type": "function",
+    "inputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+      { "name": "contentHash", "type": "string", "internalType": "string" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "supportsInterface",
+    "type": "function",
+    "inputs": [
+      { "name": "interfaceId", "type": "bytes4", "internalType": "bytes4" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "symbol",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "tickets",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+      { "name": "owner", "type": "address", "internalType": "address" },
+      { "name": "originalPrice", "type": "uint256", "internalType": "uint256" },
+      { "name": "isSoulbound", "type": "bool", "internalType": "bool" },
+      { "name": "isUsed", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "ticketsBought",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "tokenURI",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "transferFrom",
+    "type": "function",
+    "inputs": [
+      { "name": "from", "type": "address", "internalType": "address" },
+      { "name": "to", "type": "address", "internalType": "address" },
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "transferOwnership",
+    "type": "function",
+    "inputs": [{ "name": "to", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "transferTicket",
+    "type": "function",
+    "inputs": [
+      { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
+      { "name": "to", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "name": "vrfRequested",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "vrfRequests",
+    "type": "function",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "eventId", "type": "uint256", "internalType": "uint256" },
+      { "name": "fulfilled", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "name": "vrfSubscriptionId",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "name": "walletTokens",
+    "type": "function",
+    "inputs": [
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  { "type": "receive", "stateMutability": "payable" }
+]

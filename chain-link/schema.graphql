@@ -1,0 +1,127 @@
+type Event @entity(immutable: false) {
+  id: ID!
+  name: String!
+  description: String!
+  startTime: BigInt!
+  endTime: BigInt!
+  location: String!
+  creator: Bytes!
+}
+
+type CashbackPaid @entity(immutable: true) {
+  id: Bytes!
+  eventId: BigInt! # uint256
+  winner: Bytes! # address
+  amount: BigInt! # uint256
+  vrfRequestId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CoordinatorSet @entity(immutable: true) {
+  id: Bytes!
+  vrfCoordinator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferRequested @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResaleCancelled @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  seller: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResaleCompleted @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  buyer: Bytes! # address
+  seller: Bytes! # address
+  price: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResaleListed @entity(immutable: true) {
+  id: Bytes!
+  tokenId: BigInt! # uint256
+  seller: Bytes! # address
+  resalePrice: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ReviewSubmitted @entity(immutable: true) {
+  id: Bytes!
+  eventId: BigInt! # uint256
+  reviewer: Bytes! # address
+  contentHash: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type StakeSettled @entity(immutable: true) {
+  id: Bytes!
+  eventId: BigInt! # uint256
+  organiser: Bytes! # address
+  organiserAmount: BigInt! # uint256
+  platformAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TicketPurchased @entity(immutable: true) {
+  id: Bytes!
+  eventId: BigInt! # uint256
+  tokenId: BigInt! # uint256
+  buyer: Bytes! # address
+  price: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VRFWinnerRequested @entity(immutable: true) {
+  id: Bytes!
+  requestId: BigInt! # uint256
+  eventId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
